@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Downloader by Shohag Vai</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        input, button {
+            padding: 10px;
+            width: 80%;
+            margin: 10px auto;
+            display: block;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📥 YouTube Video Downloader</h1>
+    <input type="text" id="ytUrl" placeholder="Paste YouTube video URL here">
+    <button onclick="download()">Download</button>
+    <div id="result"></div>
+
+    <script>
+        function download() {
+            const url = document.getElementById('ytUrl').value;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = "Downloading... Please wait.";
+
+            fetch(`/download?key=SHOHAGVAII&url=${encodeURIComponent(url)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.file_url) {
+                        resultDiv.innerHTML = `
+                            ✅ <b>Download Ready!</b><br>
+                            <a href="${data.file_url}" download="${data.filename}">Click here to download: ${data.filename}</a>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `❌ Error: ${data.error}`;
+                    }
+                })
+                .catch(err => {
+                    resultDiv.innerHTML = `❌ Error: ${err}`;
+                });
+        }
+    </script>
+</body>
+</html>
